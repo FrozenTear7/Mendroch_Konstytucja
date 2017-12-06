@@ -12,6 +12,11 @@ public class Tree {
         this.children = new ArrayList<>();
     }
 
+    public Tree(String data) {
+        this.data = data;
+        this.children = new ArrayList<>();
+    }
+
     public void addChild(Tree child) {
         child.parent = this;
         this.children.add(child);
@@ -19,10 +24,13 @@ public class Tree {
 
     public void printPreorder(Tree parent) {
         if(parent.data != null) {
-            System.out.println(parent.key + " " + parent.data);
+            if(!key.isEmpty())
+                System.out.println(parent.key + " " + parent.data);
+            else
+                System.out.println(parent.data);
 
             if(parent.children.size() != 0)
-                for(Tree child : children) {
+                for(Tree child : parent.children) {
                     printPreorder(child);
                 }
         }
