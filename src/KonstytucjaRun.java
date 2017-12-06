@@ -13,6 +13,8 @@ public class KonstytucjaRun {
         //String element = input.next();
 
         InputParser inputParser = new InputParser(filePath);
+        inputParser.parseInputFile();
+
         //OptionsParser optionsParser = new OptionsParser(mode, element);
 
         //System.out.println(inputParser.parseInputFile());
