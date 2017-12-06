@@ -1,33 +1,20 @@
-import java.io.*;
 import java.util.Scanner;
 
 public class KonstytucjaRun {
     public static void main(String args[]) {
         Scanner input = new Scanner(System.in);
-        //System.out.println("Podaj ścieżkę do pliku: ");
+        System.out.println("Podaj ścieżkę do pliku: ");
         //String filePath = input.next();
         String filePath = "./konstytucja.txt";
-        String finalInput;
+        System.out.println("Podaj tryb działania programu: S - Spis treści, T - Treść podanego pliku");
+        //String mode = input.next();
+        System.out.println("Podaj element, który chcesz wyświetlić:\nLEGENDA:\n" +
+                "R - Rozdział, A - Artykuł, U - Ustęp, P - Pkt, PP - Podpunkt\n+ numer\nBrak argumentu wyświetli cały plik lub cały spis treści\n");
+        //String element = input.next();
 
-        StringBuilder contentBuilder = new StringBuilder();
-        try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(filePath), "Cp1250"))) {
-            String sCurrentLine;
+        InputParser inputParser = new InputParser(filePath);
+        //OptionsParser optionsParser = new OptionsParser(mode, element);
 
-            while ((sCurrentLine = br.readLine()) != null) {
-                if (sCurrentLine.matches(".*\\d{4}-\\d{2}-\\d{2}.*") || sCurrentLine.matches(".*Kancelaria Sejmu.*"))
-                    contentBuilder.append("");
-                else if(sCurrentLine.endsWith("-"))
-                    contentBuilder.append(sCurrentLine.substring(0, sCurrentLine.length()-1));
-                else if (!sCurrentLine.endsWith(",") && !sCurrentLine.endsWith("."))
-                    contentBuilder.append(sCurrentLine).append(" ");
-                else
-                    contentBuilder.append(sCurrentLine).append("\n");
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        finalInput = contentBuilder.toString();
-        System.out.println(finalInput);
+        //System.out.println(inputParser.parseInputFile());
     }
 }
