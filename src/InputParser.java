@@ -8,7 +8,7 @@ public class InputParser {
     private Scanner input = new Scanner(System.in);
     private String filePath, mode, element;
     private int chapter = 0, section = 0, article = 0, point = 0;
-    private Tree Rparent, Sparent, Aparent;
+    private Tree Rparent = null, Sparent = null, Aparent = null;
 
     public InputParser(String filePath, String mode, String element) {
         this.filePath = filePath;
@@ -23,14 +23,14 @@ public class InputParser {
             String sCurrentLine;
 
             while ((sCurrentLine = br.readLine()) != null) {
-                if (sCurrentLine.matches(".*\\d{4}-\\d{2}-\\d{2}.*") || sCurrentLine.matches(".*Kancelaria Sejmu.*"))
-                    continue;
-                else if (sCurrentLine.matches("^Rozdział \\w*$") && sCurrentLine.length() > 2) {
+                if (sCurrentLine.matches("^Rozdział \\w*$") && sCurrentLine.length() > 2) {
                     Tree newChapter = new Tree("Rozdział " + Integer.toString((++chapter)), sCurrentLine + "\n");
                     root.addChild(newChapter);
                     Rparent = newChapter;
                     section = 0;
-                } else if (sCurrentLine.matches("^[^a-z]*$") && sCurrentLine.length() > 2) {
+                } else if (Rparent == null || sCurrentLine.matches(".*\\d{4}-\\d{2}-\\d{2}.*") || sCurrentLine.matches(".*Kancelaria Sejmu.*"))
+                    continue;
+                else if (sCurrentLine.matches("^[^a-z]*$") && sCurrentLine.length() > 2) {
                     Tree newSection = new Tree("Sekcja " + Integer.toString((++section)), sCurrentLine + "\n");
                     Rparent.addChild(newSection);
                     Sparent = newSection;
