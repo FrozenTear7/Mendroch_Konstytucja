@@ -1,3 +1,5 @@
+package project1;
+
 public class OptionsParser {
     private String mode, element;
     private int range1, range2;

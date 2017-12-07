@@ -1,21 +1,16 @@
+package project1;
+
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-public class InputParser {
-    private String filePath, mode, element;
-    private int range1, range2;
-    private Tree root;
+public class KonstytucjaAbstractInputParser extends AbstractInputParser {
     private int chapter = 0, section = 0, article = 0, point = 0;
     private Tree Rparent = null, Sparent = null, Aparent = null;
 
-    public InputParser(String filePath, String mode, String element, int range1, int range2) {
-        this.filePath = filePath;
-        this.mode = mode;
-        this.element = element;
-        this.range1 = range1;
-        this.range2 = range2;
+    public KonstytucjaAbstractInputParser(String filePath, String mode, String element, int range1, int range2) {
+        super(filePath, mode, element, range1, range2);
     }
 
     public void parseInputFile() {
