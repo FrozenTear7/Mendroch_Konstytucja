@@ -2,22 +2,24 @@ import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Scanner;
 
 public class InputParser {
-    private Scanner input = new Scanner(System.in);
     private String filePath, mode, element;
+    private int range1, range2;
+    private Tree root;
     private int chapter = 0, section = 0, article = 0, point = 0;
     private Tree Rparent = null, Sparent = null, Aparent = null;
 
-    public InputParser(String filePath, String mode, String element) {
+    public InputParser(String filePath, String mode, String element, int range1, int range2) {
         this.filePath = filePath;
         this.mode = mode;
         this.element = element;
+        this.range1 = range1;
+        this.range2 = range2;
     }
 
     public void parseInputFile() {
-        Tree root = new Tree("ROOT", "Zawartosc pliku:");
+        root = new Tree("ROOT", "Zawartosc pliku:");
 
         try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(filePath), "Cp1250"))) {
             String sCurrentLine;
@@ -62,7 +64,7 @@ public class InputParser {
             e.printStackTrace();
         }
 
-        OptionsParser optionsParser = new OptionsParser(mode, element, root);
+        OptionsParser optionsParser = new OptionsParser(mode, element, range1, range2, root);
         optionsParser.printOutput();
     }
 }
