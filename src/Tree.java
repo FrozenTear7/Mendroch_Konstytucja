@@ -22,17 +22,59 @@ public class Tree {
         this.children.add(child);
     }
 
+    public Tree findNode(Tree parent, String key) {
+        if(parent.key != null) {
+            if(parent.key.equals(key))
+                return parent;
+            else {
+                for(Tree child : parent.children) {
+                    Tree result = findNode(child, key);
+                    if(result != null)
+                        return result;
+                }
+            }
+        }
+
+        return null;
+    }
+
+    public void printPreorderList(Tree parent) {
+        if(parent.key != null) {
+            if(parent.key.matches("^Rozdział \\d*$"))
+                System.out.println(parent.key);
+            if(parent.key.matches("^Sekcja \\d*$"))
+                System.out.println("    " + parent.key);
+            if(parent.key.matches("^Artykuł \\d*$"))
+                System.out.println("        " + parent.key);
+            if(parent.key.matches("^Punkt \\d*$"))
+                System.out.println("            " + parent.key);
+        }
+
+
+        if(parent.children.size() != 0)
+            for(Tree child : parent.children) {
+                printPreorderList(child);
+            }
+    }
+
     public void printPreorder(Tree parent) {
         if(parent.data != null) {
-            if(!key.isEmpty())
-                System.out.println(parent.key + " " + parent.data);
-            else
-                System.out.println(parent.data);
+            System.out.println(parent.data);
 
             if(parent.children.size() != 0)
                 for(Tree child : parent.children) {
                     printPreorder(child);
                 }
         }
+    }
+
+    public void printNode(Tree root, String key) {
+        printPreorder(findNode(root, key));
+    }
+
+    public void printNodeList(Tree root, String key) {
+        Tree nodeToPrint = findNode(root, key);
+        if(nodeToPrint != null)
+            printPreorderList(nodeToPrint);
     }
 }
