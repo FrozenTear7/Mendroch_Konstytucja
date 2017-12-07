@@ -5,11 +5,11 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-public class KonstytucjaAbstractInputParser extends AbstractInputParser {
+public class KonstytucjaInputParser extends AbstractInputParser {
     private int chapter = 0, section = 0, article = 0, point = 0;
     private Tree Rparent = null, Sparent = null, Aparent = null, Pparent = null;
 
-    public KonstytucjaAbstractInputParser(String filePath, String mode, String element, int range1, int range2) {
+    public KonstytucjaInputParser(String filePath, String mode, String element, int range1, int range2) {
         super(filePath, mode, element, range1, range2);
     }
 
@@ -49,23 +49,23 @@ public class KonstytucjaAbstractInputParser extends AbstractInputParser {
                     Tree newPoint = new Tree("Artykuł " + article + " Punkt " + Integer.toString((++point)), sCurrentLine + "\n");
                     Pparent = newPoint;
                     Aparent.addChild(newPoint);
-                }  else if (sCurrentLine.endsWith("-")) {
+                } else if (sCurrentLine.endsWith("-")) {
                     sCurrentLine = sCurrentLine.substring(0, sCurrentLine.length() - 1);
-                    Tree newPoint = new Tree( sCurrentLine);
-                    if(Pparent == null)
+                    Tree newPoint = new Tree(sCurrentLine);
+                    if (Pparent == null)
                         Aparent.addChild(newPoint);
                     else
                         Pparent.addChild(newPoint);
                 } else if (!sCurrentLine.endsWith(",") && !sCurrentLine.endsWith(".")) {
                     sCurrentLine += " ";
                     Tree newPoint = new Tree(sCurrentLine);
-                    if(Pparent == null)
+                    if (Pparent == null)
                         Aparent.addChild(newPoint);
                     else
                         Pparent.addChild(newPoint);
                 } else {
                     Tree newPoint = new Tree(sCurrentLine + "\n");
-                    if(Pparent == null)
+                    if (Pparent == null)
                         Aparent.addChild(newPoint);
                     else
                         Pparent.addChild(newPoint);

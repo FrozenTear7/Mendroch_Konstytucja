@@ -5,7 +5,7 @@ public class OptionsParser {
     private int range1, range2;
     private Tree root;
 
-    public OptionsParser (String mode, String element, int range1, int range2, Tree root) {
+    public OptionsParser(String mode, String element, int range1, int range2, Tree root) {
         this.mode = mode;
         this.element = element;
         this.range1 = range1;
@@ -14,19 +14,23 @@ public class OptionsParser {
     }
 
     public void printOutput() {
-        if(mode.equals("S")){
-            if(range2 == 0) {
+        if (mode.equals("S")) {
+            if(element.equals("ALL")) {
+                root.printPreorderList(root);
+            } else if (range2 == 0) {
                 root.printNodeList(root, element + " " + Integer.toString(range1));
             } else {
-                for(; range1 <= range2; range1++) {
+                for (; range1 <= range2; range1++) {
                     root.printNodeList(root, element + " " + Integer.toString(range1));
                 }
             }
-        } else if(mode.equals("T")){
-            if(range2 == 0) {
+        } else if (mode.equals("T")) {
+            if(element.equals("ALL")) {
+                root.printPreorder(root);
+            } else if (range2 == 0) {
                 root.printNode(root, element + " " + Integer.toString(range1));
             } else {
-                for(; range1 <= range2; range1++) {
+                for (; range1 <= range2; range1++) {
                     root.printNode(root, element + " " + Integer.toString(range1));
                 }
             }

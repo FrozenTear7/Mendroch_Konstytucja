@@ -25,13 +25,13 @@ public class Tree {
     }
 
     public Tree findNode(Tree parent, String key) {
-        if(parent.key != null) {
-            if(parent.key.equals(key))
+        if (parent.key != null) {
+            if (parent.key.equals(key))
                 return parent;
             else {
-                for(Tree child : parent.children) {
+                for (Tree child : parent.children) {
                     Tree result = findNode(child, key);
-                    if(result != null)
+                    if (result != null)
                         return result;
                 }
             }
@@ -41,30 +41,30 @@ public class Tree {
     }
 
     public void printPreorderList(Tree parent) {
-        if(parent.key != null) {
-            if(parent.key.matches("^Rozdział \\d*$"))
+        if (parent.key != null) {
+            if (parent.key.matches("^Rozdział \\d*$"))
                 System.out.println(parent.key);
-            if(parent.key.matches("^Sekcja \\d*$"))
+            if (parent.key.matches("^Sekcja \\d*$"))
                 System.out.println("    " + parent.key);
-            if(parent.key.matches("^Artykuł \\d*$"))
+            if (parent.key.matches("^Artykuł \\d*$"))
                 System.out.println("        " + parent.key);
-            if(parent.key.matches("^Punkt \\d*$"))
+            if (parent.key.matches("^Artykuł \\d* Punkt \\d*$"))
                 System.out.println("            " + parent.key);
         }
 
 
-        if(parent.children.size() != 0)
-            for(Tree child : parent.children) {
+        if (parent.children.size() != 0)
+            for (Tree child : parent.children) {
                 printPreorderList(child);
             }
     }
 
     public void printPreorder(Tree parent) {
-        if(parent.data != null) {
+        if (parent.data != null) {
             System.out.print(parent.data);
 
-            if(parent.children.size() != 0)
-                for(Tree child : parent.children) {
+            if (parent.children.size() != 0)
+                for (Tree child : parent.children) {
                     printPreorder(child);
                 }
         }
@@ -76,7 +76,7 @@ public class Tree {
 
     public void printNodeList(Tree root, String key) {
         Tree nodeToPrint = findNode(root, key);
-        if(nodeToPrint != null)
+        if (nodeToPrint != null)
             printPreorderList(nodeToPrint);
     }
 }
