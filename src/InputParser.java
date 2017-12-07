@@ -26,21 +26,24 @@ public class InputParser {
                 if (sCurrentLine.matches(".*\\d{4}-\\d{2}-\\d{2}.*") || sCurrentLine.matches(".*Kancelaria Sejmu.*"))
                     continue;
                 else if (sCurrentLine.matches("^Rozdział \\w*$") && sCurrentLine.length() > 2) {
-                    Tree newChapter = new Tree("Rozdział " + Integer.toString((++chapter)), sCurrentLine);
+                    Tree newChapter = new Tree("Rozdział " + Integer.toString((++chapter)), sCurrentLine + "\n");
                     root.addChild(newChapter);
                     Rparent = newChapter;
                     section = 0;
                 } else if (sCurrentLine.matches("^[^a-z]*$") && sCurrentLine.length() > 2) {
-                    Tree newSection = new Tree("Sekcja " + Integer.toString((++section)), sCurrentLine);
+                    Tree newSection = new Tree("Sekcja " + Integer.toString((++section)), sCurrentLine + "\n");
                     Rparent.addChild(newSection);
                     Sparent = newSection;
                 } else if (sCurrentLine.matches("^Art. [0-9]*.$")) {
-                    Tree newArticle = new Tree("Artykuł " + Integer.toString((++article)), sCurrentLine);
+                    Tree newArticle = new Tree("Artykuł " + Integer.toString((++article)), sCurrentLine + "\n");
                     Sparent.addChild(newArticle);
                     Aparent = newArticle;
                     point = 0;
+                } else if (sCurrentLine.matches("^[0-9]{1,2}\\. [\\s\\p{L}]+$") && !sCurrentLine.endsWith(",") && !sCurrentLine.endsWith(".")) {
+                    Tree newPoint = new Tree("Punkt " + Integer.toString((++point)), sCurrentLine + " ");
+                    Aparent.addChild(newPoint);
                 } else if (sCurrentLine.matches("^[0-9]{1,2}\\. [\\s\\p{L}]+$")) {
-                    Tree newPoint = new Tree("Punkt " + Integer.toString((++point)), sCurrentLine);
+                    Tree newPoint = new Tree("Punkt " + Integer.toString((++point)), sCurrentLine + "\n");
                     Aparent.addChild(newPoint);
                 } else if (sCurrentLine.endsWith("-")) {
                     sCurrentLine = sCurrentLine.substring(0, sCurrentLine.length() - 1);
@@ -51,8 +54,7 @@ public class InputParser {
                     Tree newPoint = new Tree(sCurrentLine);
                     Aparent.addChild(newPoint);
                 } else {
-                    sCurrentLine += "\n";
-                    Tree newPoint = new Tree(sCurrentLine);
+                    Tree newPoint = new Tree(sCurrentLine + "\n");
                     Aparent.addChild(newPoint);
                 }
             }

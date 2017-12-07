@@ -5,7 +5,7 @@ public class KonstytucjaRun {
         Scanner input = new Scanner(System.in);
         System.out.println("Podaj ścieżkę do pliku: ");
         //String filePath = input.next();
-        String filePath = "./konstytucja.txt", mode = "T", element = "Rozdział 4";
+        String filePath = "./konstytucja.txt", mode = "T", element = "Rozdział 1";
         System.out.println("Podaj tryb działania programu: S - Spis treści, T - Treść podanego pliku");
         //String mode = input.next();
         System.out.println("Podaj element, który chcesz wyświetlić:\nLEGENDA:\n" +
