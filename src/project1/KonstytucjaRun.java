@@ -10,10 +10,10 @@ public class KonstytucjaRun {
 
         filePath = "./konstytucja.txt";
         mode = "T";
-        element = "Rozdział";
+        element = "Artykuł 10 Punkt";
         range = "Z";
         range1 = 1;
-        range2 = 3;
+        range2 = 2;
 
         System.out.println("Podaj ścieżkę do pliku: ");
         //filePath = input.next();
