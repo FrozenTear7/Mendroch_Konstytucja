@@ -20,14 +20,14 @@ public class KonstytucjaAbstractInputParser extends AbstractInputParser {
             String sCurrentLine;
 
             while ((sCurrentLine = br.readLine()) != null) {
-                if (sCurrentLine.matches("^Rozdział \\w*$") && sCurrentLine.length() > 2) {
+                if (sCurrentLine.matches("^Rozdział \\w*$")) {
                     Tree newChapter = new Tree("Rozdział " + Integer.toString((++chapter)), sCurrentLine + "\n");
                     root.addChild(newChapter);
                     Rparent = newChapter;
                     section = 0;
                 } else if (Rparent == null || sCurrentLine.matches(".*\\d{4}-\\d{2}-\\d{2}.*") || sCurrentLine.matches(".*Kancelaria Sejmu.*"))
                     continue;
-                else if (sCurrentLine.matches("^[^a-z]*$") && sCurrentLine.length() > 2) {
+                else if (sCurrentLine.matches("^[^a-z]*$")) {
                     Tree newSection = new Tree("Sekcja " + Integer.toString((++section)), sCurrentLine + "\n");
                     Rparent.addChild(newSection);
                     Sparent = newSection;
