@@ -38,7 +38,7 @@ public class KonstytucjaInputParser extends AbstractInputParser {
                     Pparent = null;
                     point = 0;
                 } else if (sCurrentLine.matches("^[0-9]{1,2}\\. [\\s\\p{L},.]+$")) {
-                    Tree newPoint = new Tree("Artykuł " + article + " Punkt " + Integer.toString((++point)), sCurrentLine + " ");
+                    Tree newPoint = new Tree("Artykuł " + article + " Punkt " + Integer.toString((++point)), sCurrentLine + "\n");
                     Pparent = newPoint;
                     Aparent.addChild(newPoint);
                 } else if (sCurrentLine.matches("^[0-9]{1,2}\\. [\\s\\p{L}]+-$")) {
@@ -46,7 +46,7 @@ public class KonstytucjaInputParser extends AbstractInputParser {
                     Pparent = newPoint;
                     Aparent.addChild(newPoint);
                 } else if (sCurrentLine.matches("^[0-9]{1,2}\\. [\\s\\p{L}]+$") && !sCurrentLine.endsWith(",") && !sCurrentLine.endsWith(".")) {
-                    Tree newPoint = new Tree("Artykuł " + article + " Punkt " + Integer.toString((++point)), sCurrentLine + "\n");
+                    Tree newPoint = new Tree("Artykuł " + article + " Punkt " + Integer.toString((++point)), sCurrentLine + " ");
                     Pparent = newPoint;
                     Aparent.addChild(newPoint);
                 } else if (sCurrentLine.endsWith("-")) {

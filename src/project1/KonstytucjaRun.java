@@ -30,10 +30,10 @@ public class KonstytucjaRun {
                 "Rozdział, Sekcja, Artykuł, Artykuł 'Nr' Punkt, ALL\n");
         element = input.nextLine();
 
-        System.out.println("Podaj tryb wyświetlenia elementu: P - Pojedynczy element, Z - Zakres elementów");
-        range = input.nextLine();
-
         if (!element.equals("ALL")) {
+            System.out.println("Podaj tryb wyświetlenia elementu: P - Pojedynczy element, Z - Zakres elementów");
+            range = input.nextLine();
+
             switch (range) {
                 case "P":
                     System.out.println("Podaj numer elementu do wyświetlenia");
