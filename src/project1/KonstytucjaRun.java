@@ -1,5 +1,6 @@
 package project1;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class KonstytucjaRun {
@@ -9,16 +10,15 @@ public class KonstytucjaRun {
         String filePath, mode, element, range, plik;
 
         filePath = "./konstytucja.txt";
-/*
         mode = "S";
         element = "Rozdział";
         range = "Z";
         plik = "K";
         range1 = 1;
         range2 = 2;
-*/
         /*System.out.println("Podaj ścieżkę do pliku: ");
         filePath = input.nextLine();*/
+/*
 
         System.out.println("Podany plik to: K - Konstytucja.txt, U - UOKIK.txt");
         plik = input.nextLine();
@@ -50,7 +50,13 @@ public class KonstytucjaRun {
                     break;
             }
         }
+*/
 
+        FileParser fileParser = new FileParser(filePath);
+        ArrayList<String> fileToArray = fileParser.parseInputFile();
+        System.out.print(fileToArray);
+
+/*
         switch (plik) {
             case "K":
                 KonstytucjaInputParser konstytucjaInputParser = new KonstytucjaInputParser(filePath, mode, element, range1, range2);
@@ -63,6 +69,6 @@ public class KonstytucjaRun {
             default:
                 System.out.println("Błędne dane!");
                 break;
-        }
+        }*/
     }
 }

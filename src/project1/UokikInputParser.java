@@ -1,3 +1,4 @@
+/*
 package project1;
 
 import java.io.BufferedReader;
@@ -12,7 +13,8 @@ public class UokikInputParser extends AbstractInputParser {
     public UokikInputParser(String filePath, String mode, String element, int range1, int range2) {
         super(filePath, mode, element, range1, range2);
     }
-
+*/
+/*
     public void parseInputFile() {
         root = new Tree("ROOT", "Zawartosc pliku:");
 
@@ -78,5 +80,7 @@ public class UokikInputParser extends AbstractInputParser {
 
         OptionsParser optionsParser = new OptionsParser(mode, element, range1, range2, root);
         optionsParser.printOutput();
-    }
+    }*//*
+
 }
+*/

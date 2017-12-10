@@ -1,81 +1,52 @@
 package project1;
 
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Stack;
 
-public class KonstytucjaInputParser extends AbstractInputParser {
-    private int chapter = 0, section = 0, article = 0, point = 0;
-    private Tree Rparent = null, Sparent = null, Aparent = null, Pparent = null;
+public class KonstytucjaInputParser {
+    private int chapter = 0, section = 0, article = 0, point = 0, range1, range2;
+    private String mode, element;
+    private Tree root;
+    private ArrayList<String> fileArray;
+    private Stack<Tree> parents = new Stack<>();
 
-    public KonstytucjaInputParser(String filePath, String mode, String element, int range1, int range2) {
-        super(filePath, mode, element, range1, range2);
+    public KonstytucjaInputParser(ArrayList<String> fileArray, String mode, String element, int range1, int range2) {
+        this.fileArray = fileArray;
+        this.mode = mode;
+        this.element = element;
+        this.range1 = range1;
+        this.range2 = range2;
     }
 
-    public void parseInputFile() {
+    public String parseKey(String data) {
+        String newKey;
+
+        if (data.matches("^Rozdział \\w*$"))
+            newKey = "Rozdział " + Integer.toString((++chapter));
+        else if (data.matches("^[^a-z]*$"))
+            newKey = "Sekcja " + Integer.toString((++section));
+        else if (data.matches("^Art. [0-9]*.$"))
+            newKey = "Artykuł " + Integer.toString((++article));
+        else if (data.matches("^[0-9]{1,2}\\. [\\s\\p{L},.]+$"))
+            newKey = "Artykuł " + article + " Punkt " + Integer.toString((++point));
+        else
+            newKey = "";
+
+        return newKey;
+    }
+
+    public void addToTree(String data) {
+        parents.peek().addChild(new Tree(parseKey(data), data));
+    }
+
+    public Tree parseInputFile() {
         root = new Tree("ROOT", "Zawartosc pliku:");
+        parents.add(root);
 
-        try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(filePath), "Cp1250"))) {
-            String sCurrentLine;
-
-            while ((sCurrentLine = br.readLine()) != null) {
-                if (sCurrentLine.matches("^Rozdział \\w*$")) {
-                    Tree newChapter = new Tree("Rozdział " + Integer.toString((++chapter)), sCurrentLine + "\n");
-                    root.addChild(newChapter);
-                    Rparent = newChapter;
-                    section = 0;
-                } else if (Rparent == null || sCurrentLine.matches(".*\\d{4}-\\d{2}-\\d{2}.*") || sCurrentLine.matches(".*Kancelaria Sejmu.*"))
-                    continue;
-                else if (sCurrentLine.matches("^[^a-z]*$")) {
-                    Tree newSection = new Tree("Sekcja " + Integer.toString((++section)), sCurrentLine + "\n");
-                    Rparent.addChild(newSection);
-                    Sparent = newSection;
-                } else if (sCurrentLine.matches("^Art. [0-9]*.$")) {
-                    Tree newArticle = new Tree("Artykuł " + Integer.toString((++article)), sCurrentLine + "\n");
-                    Sparent.addChild(newArticle);
-                    Aparent = newArticle;
-                    Pparent = null;
-                    point = 0;
-                } else if (sCurrentLine.matches("^[0-9]{1,2}\\. [\\s\\p{L},.]+$")) {
-                    Tree newPoint = new Tree("Artykuł " + article + " Punkt " + Integer.toString((++point)), sCurrentLine + "\n");
-                    Pparent = newPoint;
-                    Aparent.addChild(newPoint);
-                } else if (sCurrentLine.matches("^[0-9]{1,2}\\. [\\s\\p{L}]+-$")) {
-                    Tree newPoint = new Tree("Artykuł " + article + " Punkt " + Integer.toString((++point)), sCurrentLine.substring(0, sCurrentLine.length() - 1));
-                    Pparent = newPoint;
-                    Aparent.addChild(newPoint);
-                } else if (sCurrentLine.matches("^[0-9]{1,2}\\. [\\s\\p{L}]+$") && !sCurrentLine.endsWith(",") && !sCurrentLine.endsWith(".")) {
-                    Tree newPoint = new Tree("Artykuł " + article + " Punkt " + Integer.toString((++point)), sCurrentLine + " ");
-                    Pparent = newPoint;
-                    Aparent.addChild(newPoint);
-                } else if (sCurrentLine.endsWith("-")) {
-                    sCurrentLine = sCurrentLine.substring(0, sCurrentLine.length() - 1);
-                    Tree newPoint = new Tree(sCurrentLine);
-                    if (Pparent == null)
-                        Aparent.addChild(newPoint);
-                    else
-                        Pparent.addChild(newPoint);
-                } else if (!sCurrentLine.endsWith(",") && !sCurrentLine.endsWith(".")) {
-                    sCurrentLine += " ";
-                    Tree newPoint = new Tree(sCurrentLine);
-                    if (Pparent == null)
-                        Aparent.addChild(newPoint);
-                    else
-                        Pparent.addChild(newPoint);
-                } else {
-                    Tree newPoint = new Tree(sCurrentLine + "\n");
-                    if (Pparent == null)
-                        Aparent.addChild(newPoint);
-                    else
-                        Pparent.addChild(newPoint);
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
+        for (String newLine : fileArray) {
+            addToTree(newLine);
         }
 
-        OptionsParser optionsParser = new OptionsParser(mode, element, range1, range2, root);
-        optionsParser.printOutput();
+        return root;
     }
 }
