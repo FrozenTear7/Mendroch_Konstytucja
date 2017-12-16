@@ -10,12 +10,12 @@ public class KonstytucjaRun {
         String filePath, mode, element, range, plik;
 
         filePath = "./konstytucja.txt";
-        mode = "S";
+        mode = "T";
         element = "Rozdział";
-        range = "Z";
+        range = "P";
         plik = "K";
         range1 = 1;
-        range2 = 2;
+        range2 = 0;
         /*System.out.println("Podaj ścieżkę do pliku: ");
         filePath = input.nextLine();*/
 /*
@@ -54,7 +54,14 @@ public class KonstytucjaRun {
 
         FileParser fileParser = new FileParser(filePath);
         ArrayList<String> fileToArray = fileParser.parseInputFile();
-        System.out.print(fileToArray);
+
+        KonstytucjaInputParser konstytucjaInputParser = new KonstytucjaInputParser(fileToArray);
+        Tree root = konstytucjaInputParser.parseInputFile();
+
+        OptionsParser optionsParser = new OptionsParser(mode, element, range1, range2, root);
+        optionsParser.printOutput();
+
+        //root.printPreorder(root);
 
 /*
         switch (plik) {

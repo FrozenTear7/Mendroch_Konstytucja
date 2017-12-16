@@ -33,39 +33,23 @@ public class FileParser {
                             || sCurrentLine.matches("^Art. [0-9]*.$")) {
                         fileArray.add(sCurrentLine + "\n");
                         index++;
-                    } else if (sCurrentLine.substring(sCurrentLine.length() - 1).equals(",")) {
-                        String tmp = fileArray.get(index);
-                        if (tmp.matches("^Art. [0-9]*.\\D*$") || tmp.substring(0, tmp.length()-2).matches("^\\d*. \\D*.$"))
-                            fileArray.add(++index, sCurrentLine + " ");
-                        else
-                            fileArray.set(index, tmp + sCurrentLine + " ");
-                    } else if (sCurrentLine.substring(sCurrentLine.length() - 1).equals(".")) {
-                        String tmp = fileArray.get(index);
-                        if (tmp.matches("^Art. [0-9]*.\\D*$") || tmp.substring(0, tmp.length()-2).matches("^\\d*. \\D*.$"))
-                            fileArray.add(++index, sCurrentLine + "\n");
-                        else
-                            fileArray.set(index, tmp + sCurrentLine + "\n");
-                    } else if (sCurrentLine.substring(sCurrentLine.length() - 1).equals("-")) {
-                        String tmp = fileArray.get(index);
-                        if (tmp.matches("^Art. [0-9]*.\\D*$") || tmp.substring(0, tmp.length()-2).matches("^\\d*. \\D*.$"))
-                            fileArray.add(++index, sCurrentLine.substring(0, sCurrentLine.length() - 1));
-                        else
-                            fileArray.set(index, tmp + sCurrentLine.substring(0, sCurrentLine.length() - 1));
-                    } else if (sCurrentLine.matches("^\\d*. \\D*-$")) {
-                        fileArray.add(sCurrentLine.substring(0, sCurrentLine.length() - 1));
-                        index++;
-                    } else if (sCurrentLine.matches("^\\d*. \\D*[.]$")) {
-                        fileArray.add(sCurrentLine + "\n");
-                        index++;
-                    } else if (sCurrentLine.matches("^\\d*. \\D*,+$")) {
-                        fileArray.add(sCurrentLine + "");
-                        index++;
                     } else if (sCurrentLine.matches("^\\d*. \\D*$")) {
-                        fileArray.add(sCurrentLine + " ");
+                        if(sCurrentLine.matches("^\\d*. \\D*-$"))
+                            fileArray.add(sCurrentLine.substring(0, sCurrentLine.length() - 1));
+                        else if (sCurrentLine.matches("^\\d*. \\D*[.]$"))
+                            fileArray.add(sCurrentLine + "\n");
+                        else
+                            fileArray.add(sCurrentLine + " ");
+
                         index++;
                     } else {
                         String tmp = fileArray.get(index);
-                        fileArray.set(index, tmp + sCurrentLine + " ");
+                        if (sCurrentLine.substring(sCurrentLine.length() - 1).equals("."))
+                            fileArray.set(index, tmp + sCurrentLine + "\n");
+                        else if (sCurrentLine.substring(sCurrentLine.length() - 1).equals("-"))
+                            fileArray.set(index, tmp + sCurrentLine.substring(0, sCurrentLine.length() - 1));
+                        else
+                            fileArray.set(index, tmp + sCurrentLine + " ");
                     }
                 }
             }

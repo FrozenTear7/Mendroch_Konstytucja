@@ -52,7 +52,6 @@ public class Tree {
                 System.out.println("            " + parent.key);
         }
 
-
         if (parent.children.size() != 0)
             for (Tree child : parent.children) {
                 printPreorderList(child);
