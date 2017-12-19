@@ -3,6 +3,6 @@
   <component name="Encoding">
     <file url="file://$PROJECT_DIR$/konstytucja.txt" charset="windows-1250" />
     <file url="file://$PROJECT_DIR$/test.txt" charset="windows-1250" />
-    <file url="file://$PROJECT_DIR$/uokik.txt" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/uokik.txt" charset="windows-1250" />
   </component>
 </project>
