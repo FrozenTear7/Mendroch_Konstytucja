@@ -25,7 +25,7 @@ public class FileParser {
                     if (sCurrentLine.matches("^Rozdział \\w*$") || sCurrentLine.matches("^DZIAŁ \\w*$")) {
                         textStarted = true;
                         fileArray.add(sCurrentLine + "\n");
-                    }
+                }
                 } else {
                     if (sCurrentLine.matches(".*\\d{4}-\\d{2}-\\d{2}.*") || sCurrentLine.matches(".*Kancelaria Sejmu.*"))
                         continue;
@@ -33,10 +33,10 @@ public class FileParser {
                             || sCurrentLine.matches("^Art. [0-9]*.$")) {
                         fileArray.add(sCurrentLine + "\n");
                         index++;
-                    } else if (sCurrentLine.matches("^\\d*. \\D*$")) {
-                        if(sCurrentLine.matches("^\\d*. \\D*-$"))
+                    } else if (sCurrentLine.matches("^\\d*. \\D*$") || sCurrentLine.matches("^\\d*\\) \\D*$") || sCurrentLine.matches("^[a-z]*\\) \\D*$")) {
+                        if (sCurrentLine.matches("^\\D*-$"))
                             fileArray.add(sCurrentLine.substring(0, sCurrentLine.length() - 1));
-                        else if (sCurrentLine.matches("^\\d*. \\D*[.]$"))
+                        else if (sCurrentLine.matches("^\\D*[.]$"))
                             fileArray.add(sCurrentLine + "\n");
                         else
                             fileArray.add(sCurrentLine + " ");

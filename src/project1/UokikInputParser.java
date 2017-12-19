@@ -1,86 +1,51 @@
-/*
 package project1;
 
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.util.ArrayList;
 
-public class UokikInputParser extends AbstractInputParser {
-    private int section = 0, article = 0, subArticle = 0, point = 0, ppoint = 0, pppoint = 0;
-    private Tree Dparent = null, Aparent = null, Pparent = null, PPparent = null, PPPparent = null, lastParent = null;
+public class UokikInputParser {
+    private int chapter = 0, subChapter = 0, article = 0, point = 0, subPoint = 0, subSubPoint = 0;
+    private ArrayList<String> fileArray;
+    private Tree root, currentChapter, currentSubChapter, currentArticle, currentPoint, currentSubPoint;
 
-    public UokikInputParser(String filePath, String mode, String element, int range1, int range2) {
-        super(filePath, mode, element, range1, range2);
+    public UokikInputParser(ArrayList<String> fileArray) {
+        this.fileArray = fileArray;
     }
-*/
-/*
-    public void parseInputFile() {
-        root = new Tree("ROOT", "Zawartosc pliku:");
 
-        try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(filePath), "Cp1250"))) {
-            String sCurrentLine;
+    public void addToTree(String data) {
+        if (data.matches("^DZIAŁ \\D*$")) {
+            Tree newChild = new Tree(("Dział " + Integer.toString((++chapter))), data);
+            root.addChild(newChild);
+            currentChapter = newChild;
+        } else if (data.matches("Rozdział \\D*$")) {
+            Tree newChild = new Tree("Rozdział " + Integer.toString((++subChapter)), data);
+            currentChapter.addChild(newChild);
+            currentSubChapter = newChild;
+        } else if (data.matches("^Art. [0-9]*(.|\\n)*$")) {
+            Tree newChild = new Tree("Artykuł " + Integer.toString((++article)), data);
+            currentSubChapter.addChild(newChild);
+            currentArticle = newChild;
+        } else if (data.matches("^\\d*. \\D*$")) {
+            Tree newChild = new Tree("Artykuł " + article + " Punkt " + Integer.toString((++point)), data);
+            currentArticle.addChild(newChild);
+            currentPoint = newChild;
+        } else if (data.matches("^\\d*\\) \\D*$")) {
+            Tree newChild = new Tree("Artykuł " + article + " Punkt " + Integer.toString((++point)), data);
+            currentArticle.addChild(newChild);
+            currentPoint = newChild;
+        } else if (data.matches("^[a-z]*\\) \\D*$")) {
+            Tree newChild = new Tree("Artykuł " + article + " Punkt " + Integer.toString((++point)), data);
+            currentArticle.addChild(newChild);
+            currentPoint = newChild;
+        }
+    }
 
-            while ((sCurrentLine = br.readLine()) != null) {
-                if (sCurrentLine.matches("^DZIAŁ \\S*$")) {
-                    Tree newSection = new Tree("DZIAŁ " + Integer.toString((++section)), sCurrentLine + "\n");
-                    Dparent = newSection;
-                    root.addChild(newSection);
-                } else if (Dparent == null || sCurrentLine.matches(".*\\d{4}-\\d{2}-\\d{2}.*") || sCurrentLine.matches(".*Kancelaria Sejmu.*"))
-                    continue;
-                else if (sCurrentLine.matches("^Art. [0-9]*. \\w*[,.]+$")) {
-                    Tree newArticle = new Tree("Artykuł " + Integer.toString((++article)), sCurrentLine + " ");
-                    Aparent = newArticle;
-                    Dparent.addChild(newArticle);
-                } else if (sCurrentLine.matches("^Art. [0-9]*. \\w*+-$")) {
-                    Tree newArticle = new Tree("Artykuł " + Integer.toString((++article)), sCurrentLine.substring(0, sCurrentLine.length() - 1));
-                    Aparent = newArticle;
-                    Dparent.addChild(newArticle);
-                } else if (sCurrentLine.matches("^Art. [0-9]*. \\w*+$") && !sCurrentLine.endsWith(",") && !sCurrentLine.endsWith(".")) {
-                    Tree newArticle = new Tree("Artykuł " + Integer.toString((++article)), sCurrentLine + "\n");
-                    Aparent = newArticle;
-                    Dparent.addChild(newArticle);
-                } else if (sCurrentLine.matches("^Art. [0-9]*. [0-9]*. \\w*[,.]+$")) {
-                    Tree newArticle = new Tree("Artykuł " + Integer.toString((++article)), sCurrentLine + " ");
-                    Aparent = newArticle;
-                    Dparent.addChild(newArticle);
-                } else if (sCurrentLine.matches("^Art. [0-9]*. [0-9]*. \\w*+-$")) {
-                    Tree newArticle = new Tree("Artykuł " + Integer.toString((++article)), sCurrentLine.substring(0, sCurrentLine.length() - 1));
-                    Aparent = newArticle;
-                    Dparent.addChild(newArticle);
-                } else if (sCurrentLine.matches("^Art. [0-9]*. [0-9]*. \\w*$") && !sCurrentLine.endsWith(",") && !sCurrentLine.endsWith(".")) {
-                    Tree newArticle = new Tree("Artykuł " + Integer.toString((++article)), sCurrentLine + "\n");
-                    Aparent = newArticle;
-                    Dparent.addChild(newArticle);
-                } else if (sCurrentLine.endsWith("-")) {
-                    sCurrentLine = sCurrentLine.substring(0, sCurrentLine.length() - 1);
-                    Tree newPoint = new Tree(sCurrentLine);
-                    if (PPparent == null)
-                        Pparent.addChild(newPoint);
-                    else
-                        PPparent.addChild(newPoint);
-                } else if (!sCurrentLine.endsWith(",") && !sCurrentLine.endsWith(".")) {
-                    sCurrentLine += " ";
-                    Tree newPoint = new Tree(sCurrentLine);
-                    if (PPparent == null)
-                        Pparent.addChild(newPoint);
-                    else
-                        PPparent.addChild(newPoint);
-                } else {
-                    Tree newPoint = new Tree(sCurrentLine + "\n");
-                    if (PPparent == null)
-                        Pparent.addChild(newPoint);
-                    else
-                        PPparent.addChild(newPoint);
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
+    public Tree parseInputFile() {
+        this.root = new Tree("ROOT", "Zawartosc pliku:");
+
+        for (String newLine : fileArray) {
+            addToTree(newLine);
         }
 
-        OptionsParser optionsParser = new OptionsParser(mode, element, range1, range2, root);
-        optionsParser.printOutput();
-    }*//*
-
+        return root;
+    }
 }
-*/

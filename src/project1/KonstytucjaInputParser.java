@@ -1,7 +1,6 @@
 package project1;
 
 import java.util.ArrayList;
-import java.util.Stack;
 
 public class KonstytucjaInputParser {
     private int chapter = 0, section = 0, article = 0, point = 0;
