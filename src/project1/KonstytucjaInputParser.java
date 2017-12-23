@@ -24,6 +24,7 @@ public class KonstytucjaInputParser {
             Tree newChild = new Tree("Artykuł " + Integer.toString((++article)), data);
             currentSection.addChild(newChild);
             currentArticle = newChild;
+            point = 0;
         } else {
             Tree newChild = new Tree("Artykuł " + article + " Punkt " + Integer.toString((++point)), data);
             currentArticle.addChild(newChild);

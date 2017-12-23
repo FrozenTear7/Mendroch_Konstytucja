@@ -51,20 +51,15 @@ public class FileParser {
                         } else if (sCurrentLine.matches("^Art. [0-9]*[a-z]?.$")) {
                             fileArray.add(sCurrentLine);
                             index++;
-                        } else if (sCurrentLine.matches("^\\d{1,3}. \\D*$")
-                                || sCurrentLine.matches("^\\d{1,3}\\) \\D*$")
-                                || sCurrentLine.matches("^[0-9a-z]{1,4}\\) \\D*$")) {
+                        } else if (sCurrentLine.matches("^\\d{1,3}[a-z]?\\. .*$")
+                                || sCurrentLine.matches("^\\d{1,3}[a-z]?\\) .*$")
+                                || sCurrentLine.matches("^[a-z]{1,3}\\) .*$")) {
                             if (sCurrentLine.matches("^.*-$"))
                                 fileArray.add(sCurrentLine.substring(0, sCurrentLine.length() - 1));
-                            else if (sCurrentLine.matches("^.*[.:;]$") || sCurrentLine.matches("^[a-z]{1,3}\\) \\D*,$"))
-                                fileArray.add(sCurrentLine);
                             else
                                 fileArray.add(sCurrentLine + " ");
 
                             index++;
-                        } else if (sCurrentLine.matches("^[a-z]{1,3}\\) \\D*$")) {
-                            String tmp = fileArray.get(index);
-                            fileArray.set(index, tmp + sCurrentLine + " ");
                         } else {
                             String tmp = fileArray.get(index);
                             if ((sCurrentLine.substring(sCurrentLine.length() - 1).equals(".")
@@ -72,7 +67,7 @@ public class FileParser {
                                     || sCurrentLine.substring(sCurrentLine.length() - 1).equals(";")
                                     || sCurrentLine.substring(sCurrentLine.length() - 1).equals(")")
                                     || sCurrentLine.substring(sCurrentLine.length() - 1).equals(",")
-                                    || !sCurrentLine.matches("^\\D*-$")
+                                    || !sCurrentLine.matches("^(.|\\n)*-$")
                                     || tmp.matches("^[a-z]{1,3}\\) .*,$"))
                                     && (tmp.matches("^Art. \\d*.$")
                                     || tmp.matches("^Rozdział \\w*$")
@@ -83,7 +78,7 @@ public class FileParser {
                                     || sCurrentLine.substring(sCurrentLine.length() - 1).equals(";")
                                     || sCurrentLine.substring(sCurrentLine.length() - 1).equals(")")
                                     || sCurrentLine.substring(sCurrentLine.length() - 1).equals(",")
-                                    || !sCurrentLine.matches("^\\D*-$")
+                                    || !sCurrentLine.matches("^(.|\\n)*-$")
                                     || tmp.matches("^[a-z]{1,3}\\) .*,$")))
                                 fileArray.set(index, tmp + sCurrentLine + " ");
                             else if (sCurrentLine.substring(sCurrentLine.length() - 1).equals("-") && tmp.matches("^Art. \\d*.$"))

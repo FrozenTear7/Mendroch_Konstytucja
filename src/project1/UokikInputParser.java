@@ -23,23 +23,56 @@ public class UokikInputParser {
             currentSubChapter = newChild;
         } else if (data.matches("^Art. [0-9]*(.|\\n)*$")) {
             Tree newChild = new Tree("Artykuł " + Integer.toString((++article)), data);
-            if (currentSubChapter == null) {
-                currentChapter.addChild(newChild);
-            } else {
+            if (currentSubChapter != null) {
                 currentSubChapter.addChild(newChild);
+            } else {
+                currentChapter.addChild(newChild);
             }
             currentArticle = newChild;
-        } else if (data.matches("^[0-9a-z]{1,4}\\) .*,$")) {
-            Tree newChild = new Tree("Artykuł " + article + " Punkt " + Integer.toString((++point)), data);
-            currentArticle.addChild(newChild);
+        } else if (data.matches("^\\d*. \\D*$")) {
+            Tree newChild;
+            if (currentArticle != null) {
+                newChild = new Tree("Artykuł " + Integer.toString((++article)) + " Punkt " + Integer.toString((++point)), data);
+                currentArticle.addChild(newChild);
+            } else if (currentSubChapter != null) {
+                newChild = new Tree("Rozdział " + Integer.toString((++subChapter)) + " Punkt " + Integer.toString((++point)), data);
+                currentSubChapter.addChild(newChild);
+            } else {
+                newChild = new Tree("Dział " + Integer.toString((++chapter)) + " Punkt " + Integer.toString((++point)), data);
+                currentChapter.addChild(newChild);
+            }
             currentPoint = newChild;
         } else if (data.matches("^\\d*\\) \\D*$")) {
-            Tree newChild = new Tree("Artykuł " + article + " Punkt " + Integer.toString((++point)), data);
-            currentArticle.addChild(newChild);
+            Tree newChild;
+            if (currentPoint != null) {
+                newChild = new Tree("Artykuł " + Integer.toString((++article)) + " Punkt " + Integer.toString((++point)) + " Podpunkt " + Integer.toString((++subPoint)), data);
+                currentArticle.addChild(newChild);
+            } else if (currentArticle != null) {
+                newChild = new Tree("Artykuł " + Integer.toString((++article)) + " Podpunkt " + Integer.toString((++subPoint)), data);
+                currentArticle.addChild(newChild);
+            } else if (currentSubChapter != null) {
+                newChild = new Tree("Rozdział " + Integer.toString((++subChapter)) + " Podpunkt " + Integer.toString((++subPoint)), data);
+                currentSubChapter.addChild(newChild);
+            } else {
+                newChild = new Tree("Dział " + Integer.toString((++chapter)) + " Podpunkt " + Integer.toString((++subPoint)), data);
+                currentChapter.addChild(newChild);
+            }
             currentPoint = newChild;
-        } else if (data.matches("^[a-z]*\\) \\D*$")) {
-            Tree newChild = new Tree("Artykuł " + article + " Punkt " + Integer.toString((++point)), data);
-            currentArticle.addChild(newChild);
+        } else if (data.matches("^\\d*\\) \\D*$")) {
+            Tree newChild;
+            if (currentPoint != null) {
+                newChild = new Tree("Artykuł " + Integer.toString((++article)) + " Punkt " + Integer.toString((++point)) + " Podpunkt " + Integer.toString((++subPoint)), data);
+                currentArticle.addChild(newChild);
+            } else if (currentArticle != null) {
+                newChild = new Tree("Artykuł " + Integer.toString((++article)) + " Podpunkt " + Integer.toString((++subPoint)), data);
+                currentArticle.addChild(newChild);
+            } else if (currentSubChapter != null) {
+                newChild = new Tree("Rozdział " + Integer.toString((++subChapter)) + " Podpunkt " + Integer.toString((++subPoint)), data);
+                currentSubChapter.addChild(newChild);
+            } else {
+                newChild = new Tree("Dział " + Integer.toString((++chapter)) + " Podpunkt " + Integer.toString((++subPoint)), data);
+                currentChapter.addChild(newChild);
+            }
             currentPoint = newChild;
         }
     }
