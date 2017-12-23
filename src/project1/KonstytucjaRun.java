@@ -11,10 +11,10 @@ public class KonstytucjaRun {
 
         filePath = "./test.txt";
         mode = "T";
-        element = "Rozdział";
+        element = "ALL";
         range = "P";
         plik = "K";
-        range1 = 1;
+        range1 = 2;
         range2 = 0;
         /*System.out.println("Podaj ścieżkę do pliku: ");
         filePath = input.nextLine();*/
@@ -56,9 +56,10 @@ public class KonstytucjaRun {
         ArrayList<String> fileToArray = fileParser.parseInputFile();
 
 /*
+
         KonstytucjaInputParser konstytucjaInputParser = new KonstytucjaInputParser(fileToArray);
         Tree root = konstytucjaInputParser.parseInputFile();
-        */
+*/
 
         UokikInputParser uokikInputParser = new UokikInputParser(fileToArray);
         Tree root = uokikInputParser.parseInputFile();

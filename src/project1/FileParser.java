@@ -24,14 +24,14 @@ public class FileParser {
                 if (!textStarted) {
                     if (sCurrentLine.matches("^Rozdział \\w*$") || sCurrentLine.matches("^DZIAŁ \\w*$")) {
                         textStarted = true;
-                        fileArray.add(sCurrentLine + "\n");
+                        fileArray.add(sCurrentLine);
                         sCurrentLine = null;
                     } else
                         continue;
                 }
 
                 while (sCurrentLine != null) {
-                    if (sCurrentLine.matches("^Art. [0-9]*. .*$")) {
+                    if (sCurrentLine.matches("^Art. [0-9]*[a-z]?. .*$")) {
                         int countDots = 0, lineIndex = 0;
 
                         while (countDots != 2) {
@@ -45,9 +45,11 @@ public class FileParser {
                     } else {
                         if (sCurrentLine.matches(".*\\d{4}-\\d{2}-\\d{2}.*") || sCurrentLine.matches(".*Kancelaria Sejmu.*"))
                             break;
-                        else if (sCurrentLine.matches("^Rozdział \\w*$") || sCurrentLine.matches("^[^a-z]*$")
-                                || sCurrentLine.matches("^Art. [0-9]*.$")) {
-                            fileArray.add(sCurrentLine + "\n");
+                        else if (sCurrentLine.matches("^Rozdział \\w*$") || sCurrentLine.matches("^[^a-z]*$")) {
+                            fileArray.add(sCurrentLine);
+                            index++;
+                        } else if (sCurrentLine.matches("^Art. [0-9]*[a-z]?.$")) {
+                            fileArray.add(sCurrentLine);
                             index++;
                         } else if (sCurrentLine.matches("^\\d{1,3}. \\D*$")
                                 || sCurrentLine.matches("^\\d{1,3}\\) \\D*$")
@@ -55,7 +57,7 @@ public class FileParser {
                             if (sCurrentLine.matches("^.*-$"))
                                 fileArray.add(sCurrentLine.substring(0, sCurrentLine.length() - 1));
                             else if (sCurrentLine.matches("^.*[.:;]$") || sCurrentLine.matches("^[a-z]{1,3}\\) \\D*,$"))
-                                fileArray.add(sCurrentLine + "\n");
+                                fileArray.add(sCurrentLine);
                             else
                                 fileArray.add(sCurrentLine + " ");
 
@@ -65,17 +67,29 @@ public class FileParser {
                             fileArray.set(index, tmp + sCurrentLine + " ");
                         } else {
                             String tmp = fileArray.get(index);
-                            if (tmp.matches("^DZIAŁ (.|\\n)*$") || tmp.matches("^Rozdział (.|\\n)*$"))
-                                fileArray.set(index, tmp + sCurrentLine + "\n");
-                            else if (sCurrentLine.substring(sCurrentLine.length() - 1).equals(".")
+                            if ((sCurrentLine.substring(sCurrentLine.length() - 1).equals(".")
                                     || sCurrentLine.substring(sCurrentLine.length() - 1).equals(":")
                                     || sCurrentLine.substring(sCurrentLine.length() - 1).equals(";")
-                                    || sCurrentLine.substring(sCurrentLine.length() - 1).equals(")"))
-                                fileArray.set(index, tmp + sCurrentLine + "\n");
+                                    || sCurrentLine.substring(sCurrentLine.length() - 1).equals(")")
+                                    || sCurrentLine.substring(sCurrentLine.length() - 1).equals(",")
+                                    || !sCurrentLine.matches("^\\D*-$")
+                                    || tmp.matches("^[a-z]{1,3}\\) .*,$"))
+                                    && (tmp.matches("^Art. \\d*.$")
+                                    || tmp.matches("^Rozdział \\w*$")
+                                    || tmp.matches("^DZIAŁ \\w*$")))
+                                fileArray.set(index, tmp + "\n" + sCurrentLine + " ");
+                            else if ((sCurrentLine.substring(sCurrentLine.length() - 1).equals(".")
+                                    || sCurrentLine.substring(sCurrentLine.length() - 1).equals(":")
+                                    || sCurrentLine.substring(sCurrentLine.length() - 1).equals(";")
+                                    || sCurrentLine.substring(sCurrentLine.length() - 1).equals(")")
+                                    || sCurrentLine.substring(sCurrentLine.length() - 1).equals(",")
+                                    || !sCurrentLine.matches("^\\D*-$")
+                                    || tmp.matches("^[a-z]{1,3}\\) .*,$")))
+                                fileArray.set(index, tmp + sCurrentLine + " ");
+                            else if (sCurrentLine.substring(sCurrentLine.length() - 1).equals("-") && tmp.matches("^Art. \\d*.$"))
+                                fileArray.set(index, tmp + "\n" + sCurrentLine.substring(0, sCurrentLine.length() - 1));
                             else if (sCurrentLine.substring(sCurrentLine.length() - 1).equals("-"))
                                 fileArray.set(index, tmp + sCurrentLine.substring(0, sCurrentLine.length() - 1));
-                            else if (tmp.matches("^[a-z]{1,3}\\) .*,$"))
-                                fileArray.set(index, tmp + sCurrentLine + "\n");
                             else
                                 fileArray.set(index, tmp + sCurrentLine + " ");
                         }

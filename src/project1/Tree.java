@@ -60,7 +60,7 @@ public class Tree {
 
     public void printPreorder(Tree parent) {
         if (parent.data != null) {
-            System.out.print(parent.data);
+            System.out.println(parent.data);
 
             if (parent.children.size() != 0)
                 for (Tree child : parent.children) {
