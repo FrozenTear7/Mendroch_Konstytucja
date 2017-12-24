@@ -1,3 +1,4 @@
+/*
 package project1;
 
 import java.util.ArrayList;
@@ -13,67 +14,79 @@ public class UokikInputParser {
 
     public void addToTree(String data) {
         if (data.matches("^DZIAŁ \\D*$")) {
-            Tree newChild = new Tree(("Dział " + Integer.toString((++chapter))), data);
+            Tree newChild = new Tree("Dział " + ++chapter, data);
             root.addChild(newChild);
             currentChapter = newChild;
             currentSubChapter = null;
+            currentArticle = null;
+            currentPoint = null;
+            currentSubPoint = null;
         } else if (data.matches("Rozdział \\D*$")) {
-            Tree newChild = new Tree("Rozdział " + Integer.toString((++subChapter)), data);
+            Tree newChild = new Tree("Rozdział " + ++subChapter, data);
             currentChapter.addChild(newChild);
             currentSubChapter = newChild;
         } else if (data.matches("^Art. [0-9]*(.|\\n)*$")) {
-            Tree newChild = new Tree("Artykuł " + Integer.toString((++article)), data);
+            Tree newChild;
             if (currentSubChapter != null) {
+                newChild = new Tree("Artykuł " + ++article, data);
                 currentSubChapter.addChild(newChild);
             } else {
+                newChild = new Tree("Artykuł " + ++article, data);
                 currentChapter.addChild(newChild);
             }
             currentArticle = newChild;
-        } else if (data.matches("^\\d*. \\D*$")) {
+            currentPoint = null;
+            currentSubPoint = null;
+            point = 0; subPoint = 0; subSubPoint = 0;
+        } else if (data.matches("^\\d*[a-z]?. \\D*$")) {
             Tree newChild;
             if (currentArticle != null) {
-                newChild = new Tree("Artykuł " + Integer.toString((++article)) + " Punkt " + Integer.toString((++point)), data);
+                newChild = new Tree("Artykuł " + article + " Punkt " + ++point, data);
                 currentArticle.addChild(newChild);
             } else if (currentSubChapter != null) {
-                newChild = new Tree("Rozdział " + Integer.toString((++subChapter)) + " Punkt " + Integer.toString((++point)), data);
+                newChild = new Tree("Rozdział " + subChapter + " Punkt " + ++point, data);
                 currentSubChapter.addChild(newChild);
             } else {
-                newChild = new Tree("Dział " + Integer.toString((++chapter)) + " Punkt " + Integer.toString((++point)), data);
+                newChild = new Tree("Dział " + chapter + " Punkt " + ++point, data);
                 currentChapter.addChild(newChild);
             }
             currentPoint = newChild;
-        } else if (data.matches("^\\d*\\) \\D*$")) {
+            currentSubPoint = null;
+            subPoint = 0; subSubPoint = 0;
+        } else if (data.matches("^\\d*[a-z]?\\) .*$")) {
             Tree newChild;
             if (currentPoint != null) {
-                newChild = new Tree("Artykuł " + Integer.toString((++article)) + " Punkt " + Integer.toString((++point)) + " Podpunkt " + Integer.toString((++subPoint)), data);
-                currentArticle.addChild(newChild);
+                newChild = new Tree("Artykuł " + article + " Punkt " + point
+                        + " Podpunkt " + ++subPoint, data);
+                currentPoint.addChild(newChild);
             } else if (currentArticle != null) {
-                newChild = new Tree("Artykuł " + Integer.toString((++article)) + " Podpunkt " + Integer.toString((++subPoint)), data);
+                newChild = new Tree("Artykuł " + article + " Podpunkt " + ++subPoint, data);
                 currentArticle.addChild(newChild);
             } else if (currentSubChapter != null) {
-                newChild = new Tree("Rozdział " + Integer.toString((++subChapter)) + " Podpunkt " + Integer.toString((++subPoint)), data);
+                newChild = new Tree("Rozdział " + subChapter + " Podpunkt " + ++subPoint, data);
                 currentSubChapter.addChild(newChild);
             } else {
-                newChild = new Tree("Dział " + Integer.toString((++chapter)) + " Podpunkt " + Integer.toString((++subPoint)), data);
+                newChild = new Tree("Dział " + chapter + " Podpunkt " + ++subPoint, data);
                 currentChapter.addChild(newChild);
             }
-            currentPoint = newChild;
-        } else if (data.matches("^\\d*\\) \\D*$")) {
+            currentSubPoint = newChild;
+            subSubPoint = 0;
+        } else if (data.matches("^[a-z]?\\) .*$")) {
             Tree newChild;
             if (currentPoint != null) {
-                newChild = new Tree("Artykuł " + Integer.toString((++article)) + " Punkt " + Integer.toString((++point)) + " Podpunkt " + Integer.toString((++subPoint)), data);
-                currentArticle.addChild(newChild);
-            } else if (currentArticle != null) {
-                newChild = new Tree("Artykuł " + Integer.toString((++article)) + " Podpunkt " + Integer.toString((++subPoint)), data);
-                currentArticle.addChild(newChild);
+                newChild = new Tree("Artykuł " + article + " Punkt " + point
+                        + " Podpunkt " + subPoint + " Podpodpunkt " + ++subSubPoint, data);
+            } else if (currentPoint != null) {
+                newChild = new Tree("Artykuł " + article + " Podpunkt " + subPoint
+                        + " Podpodpunkt " + subSubPoint, data);
             } else if (currentSubChapter != null) {
-                newChild = new Tree("Rozdział " + Integer.toString((++subChapter)) + " Podpunkt " + Integer.toString((++subPoint)), data);
-                currentSubChapter.addChild(newChild);
+                newChild = new Tree("Rozdział " + subChapter + " Podpunkt " + subPoint
+                        + " Podpodpunkt " + ++subSubPoint, data);
             } else {
-                newChild = new Tree("Dział " + Integer.toString((++chapter)) + " Podpunkt " + Integer.toString((++subPoint)), data);
-                currentChapter.addChild(newChild);
+                newChild = new Tree("Dział " + chapter + " Podpunkt " + subPoint
+                        + " Podpodpunkt " + ++subSubPoint, data);
             }
-            currentPoint = newChild;
+            currentSubPoint.addChild(newChild);
         }
     }
 
@@ -87,3 +100,4 @@ public class UokikInputParser {
         return root;
     }
 }
+*/

@@ -5,23 +5,34 @@ import java.util.ArrayList;
 public class Tree {
     private String key;
     private String data;
+    private int hierarchy;
     private Tree parent;
     private ArrayList<Tree> children;
 
-    public Tree(String key, String data) {
+    public Tree(String key, String data, int hierarchy) {
         this.key = key;
         this.data = data;
+        this.hierarchy = hierarchy;
         this.children = new ArrayList<>();
     }
 
-    public Tree(String data) {
+    public Tree(String data, int hierarchy) {
         this.data = data;
+        this.hierarchy = hierarchy;
         this.children = new ArrayList<>();
     }
 
     public void addChild(Tree child) {
         child.parent = this;
         this.children.add(child);
+    }
+
+    public static int getHierarchy(Tree node) {
+        return node.hierarchy;
+    }
+
+    public static String getData(Tree node) {
+        return node.data;
     }
 
     public Tree findNode(Tree parent, String key) {
@@ -42,14 +53,7 @@ public class Tree {
 
     public void printPreorderList(Tree parent) {
         if (parent.key != null) {
-            if (parent.key.matches("^Rozdział \\d*$"))
-                System.out.println(parent.key);
-            if (parent.key.matches("^Sekcja \\d*$"))
-                System.out.println("    " + parent.key);
-            if (parent.key.matches("^Artykuł \\d*$"))
-                System.out.println("        " + parent.key);
-            if (parent.key.matches("^Artykuł \\d* Punkt \\d*$"))
-                System.out.println("            " + parent.key);
+            System.out.println(parent.key);
         }
 
         if (parent.children.size() != 0)

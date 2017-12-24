@@ -69,7 +69,7 @@ public class FileParser {
                                     || sCurrentLine.substring(sCurrentLine.length() - 1).equals(",")
                                     || !sCurrentLine.matches("^(.|\\n)*-$")
                                     || tmp.matches("^[a-z]{1,3}\\) .*,$"))
-                                    && (tmp.matches("^Art. \\d*.$")
+                                    && (tmp.matches("^Art. \\d*[a-z]?.$")
                                     || tmp.matches("^Rozdział \\w*$")
                                     || tmp.matches("^DZIAŁ \\w*$")))
                                 fileArray.set(index, tmp + "\n" + sCurrentLine + " ");
