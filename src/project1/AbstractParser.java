@@ -16,6 +16,27 @@ public abstract class AbstractParser {
         this.fileArray = fileArray;
     }
 
+    private String extractArticleKey (String data) {
+        String result = "";
+        int index = 0, dots = 0;
+        boolean end = false;
+
+        while(!end) {
+            if(data.charAt(index) == '.') {
+                dots++;
+            }
+
+            if(dots == 2) {
+                end = true;
+                result = data.substring(0, index+1);
+            }
+            else
+                index++;
+        }
+
+        return result;
+    }
+
     private String extractKey (String data) {
         String result = "";
         int index = 0;
@@ -45,26 +66,19 @@ public abstract class AbstractParser {
                 result = data.substring(0, 9);
             else if (data.matches("^DZIAŁ \\b\\D{4}\\b(.|\\n)*$"))
                 result = data.substring(0, 10);
-        } else if (data.matches("^Rozdział \\D*(.|\\n)*$")) {
-            if (data.matches("^Rozdział \\D{1}(.|\\n)*$"))
+        } else if (data.matches("^Rozdział \\S*(.|\\n)*$")) {
+            if (data.matches("^Rozdział \\S{1}(.|\\n)*$"))
                 result = data.substring(0, 10);
-            else if (data.matches("^Rozdział \\D{2}(.|\\n)*$"))
+            else if (data.matches("^Rozdział \\S{2}(.|\\n)*$"))
                 result = data.substring(0, 11);
-            else if (data.matches("^Rozdział \\D{3}(.|\\n)*$"))
+            else if (data.matches("^Rozdział \\S{3}(.|\\n)*$"))
                 result = data.substring(0, 12);
-            else if (data.matches("^Rozdział \\D{4}(.|\\n)*$"))
+            else if (data.matches("^Rozdział \\S{4}(.|\\n)*$"))
                 result = data.substring(0, 13);
         } else if (data.matches("^[^a-z]*$")) {
             result = "Sekcja " + section;
         } else if (data.matches("^Art. [0-9]*(.|\\n)*$")) {
-            if (data.matches("^Art. \\b\\d\\b.(.|\\n)*$"))
-                result = data.substring(0, 7);
-            else if (data.matches("^Art. \\b\\d{2}\\b.(.|\\n)*$"))
-                result = data.substring(0, 8);
-            else if (data.matches("^Art. \\b\\d{3}\\b.(.|\\n)*$"))
-                result = data.substring(0, 9);
-            else if (data.matches("^Art. \\b\\d{4}\\b.(.|\\n)*$"))
-                result = data.substring(0, 10);
+            result = extractArticleKey(data);
         } else if (data.matches("^\\d+[a-z]?[.)]{1} (.|\\n)*$")) {
             result = extractKey(data);
         } else if (data.matches("^[a-z]*\\) (.|\\n)*$")) {
