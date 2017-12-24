@@ -16,26 +16,43 @@ public abstract class AbstractParser {
         this.fileArray = fileArray;
     }
 
+    private String extractKey (String data) {
+        String result = "";
+        int index = 0;
+        boolean end = false;
+
+        while(!end) {
+            if(data.charAt(index) == ')' || data.charAt(index) == '.') {
+                end = true;
+                result = data.substring(0, index+1);
+            }
+            else
+                index++;
+        }
+
+        return result;
+    }
+
     protected String getNodeName(String data) {
         String result = "";
 
-        if (data.matches("^DZIAŁ \\D*$")) {
-            if (data.matches("^DZIAŁ \\D{1}$"))
+        if (data.matches("^DZIAŁ \\D*(.|\\n)*$")) {
+            if (data.matches("^DZIAŁ \\b\\D{1}\\b(.|\\n)*$"))
                 result = data.substring(0, 7);
-            else if (data.matches("^DZIAŁ \\D{2}$"))
+            else if (data.matches("^DZIAŁ \\b\\D{2}\\b(.|\\n)*$"))
                 result = data.substring(0, 8);
-            else if (data.matches("^DZIAŁ \\D{3}$"))
+            else if (data.matches("^DZIAŁ \\b\\D{3}\\b(.|\\n)*$"))
                 result = data.substring(0, 9);
-            else if (data.matches("^DZIAŁ \\D{4}$"))
+            else if (data.matches("^DZIAŁ \\b\\D{4}\\b(.|\\n)*$"))
                 result = data.substring(0, 10);
-        } else if (data.matches("^Rozdział \\D*$")) {
-            if (data.matches("^Rozdział \\D{1}$"))
+        } else if (data.matches("^Rozdział \\D*(.|\\n)*$")) {
+            if (data.matches("^Rozdział \\D{1}(.|\\n)*$"))
                 result = data.substring(0, 10);
-            else if (data.matches("^Rozdział \\D{2}$"))
+            else if (data.matches("^Rozdział \\D{2}(.|\\n)*$"))
                 result = data.substring(0, 11);
-            else if (data.matches("^Rozdział \\D{3}$"))
+            else if (data.matches("^Rozdział \\D{3}(.|\\n)*$"))
                 result = data.substring(0, 12);
-            else if (data.matches("^Rozdział \\D{4}$"))
+            else if (data.matches("^Rozdział \\D{4}(.|\\n)*$"))
                 result = data.substring(0, 13);
         } else if (data.matches("^[^a-z]*$")) {
             result = "Sekcja " + section;
@@ -48,15 +65,10 @@ public abstract class AbstractParser {
                 result = data.substring(0, 9);
             else if (data.matches("^Art. \\b\\d{4}\\b.(.|\\n)*$"))
                 result = data.substring(0, 10);
-        } else if (data.matches("^\\d*[.)]{1} (.|\\n)*$")) {
-            if (data.matches("^\\b\\d\\b. (.|\\n)*$"))
+        } else if (data.matches("^\\d+[a-z]?[.)]{1} (.|\\n)*$")) {
+            result = extractKey(data);
+        } else if (data.matches("^[a-z]*\\) (.|\\n)*$")) {
                 result = data.substring(0, 2);
-            else if (data.matches("^\\b\\d{2}\\b. (.|\\n)*$"))
-                result = data.substring(0, 3);
-            else if (data.matches("^\\b\\d{3}\\b. (.|\\n)*$"))
-                result = data.substring(0, 4);
-            else if (data.matches("^\\b\\d{4}\\b. (.|\\n)*$"))
-                result = data.substring(0, 5);
         }
 
         return result;
@@ -65,10 +77,20 @@ public abstract class AbstractParser {
     private String constructKey(String data, int hierarchy) {
         String key = "";
 
-        if (hierarchy == 1 || hierarchy == 2 || hierarchy == 3)
+        if (hierarchy == 1 || hierarchy == 2 || hierarchy == 3) {
             key = getNodeName(data);
-        else {
+            stringArray.set(4, "");
+            stringArray.set(5, "");
+            stringArray.set(6, "");
+        }
+        else if (hierarchy == 4) {
             key = stringArray.get(3) + getNodeName(data);
+        } else if (hierarchy == 5) {
+            key = stringArray.get(3) + stringArray.get(4) + getNodeName(data);
+        } else if (hierarchy == 6) {
+            key = stringArray.get(3) + stringArray.get(4) + stringArray.get(5) + getNodeName(data);
+        } else if (hierarchy == 7) {
+            key = stringArray.get(3) + stringArray.get(4) + stringArray.get(5) + stringArray.get(6) + getNodeName(data);
         }
 
         return key;
@@ -89,7 +111,7 @@ public abstract class AbstractParser {
             nodeStack.peek().addChild(newNode);
             nodeStack.push(newNode);
         } else {
-            while (hierarchy != getHierarchy(nodeStack.peek()) + 1) {
+            while (hierarchy < getHierarchy(nodeStack.peek())+1) {
                 nodeStack.pop();
             }
             newNode = new Tree(constructKey(data, hierarchy), data, hierarchy);

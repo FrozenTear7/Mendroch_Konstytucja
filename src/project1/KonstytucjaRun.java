@@ -10,7 +10,7 @@ public class KonstytucjaRun {
         String filePath, mode, element, range, plik;
 
         filePath = "./konstytucja.txt";
-        mode = "S";
+        mode = "T";
         element = "ALL";
         range = "P";
         plik = "K";
@@ -59,8 +59,8 @@ public class KonstytucjaRun {
         KonstytucjaInputParser konstytucjaInputParser = new KonstytucjaInputParser(fileToArray);
         Tree root = konstytucjaInputParser.parseInputFile();
 
-/*
 
+/*
         UokikInputParser uokikInputParser = new UokikInputParser(fileToArray);
         Tree root = uokikInputParser.parseInputFile();
 */

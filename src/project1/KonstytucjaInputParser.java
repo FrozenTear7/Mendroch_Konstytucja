@@ -16,7 +16,7 @@ public class KonstytucjaInputParser extends AbstractParser {
             section++;
         } else if (data.matches("^Art. [0-9]*(.|\\n)*$")) {
             addNode(data, 3);
-        } else if (data.matches("^\\d*. (.|\\n)*$")) {
+        } else if (data.matches("^\\d*\\. (.|\\n)*$")) {
             addNode(data, 4);
         } else
             addNode(data, 5);
@@ -25,6 +25,9 @@ public class KonstytucjaInputParser extends AbstractParser {
     public Tree parseInputFile() {
         this.root = new Tree("ROOT", "Zawartosc pliku:", 0);
         nodeStack.push(root);
+        stringArray.add("");
+        stringArray.add("");
+        stringArray.add("");
         stringArray.add("");
         stringArray.add("");
         stringArray.add("");

@@ -45,7 +45,7 @@ public class FileParser {
                     } else {
                         if (sCurrentLine.matches(".*\\d{4}-\\d{2}-\\d{2}.*") || sCurrentLine.matches(".*Kancelaria Sejmu.*"))
                             break;
-                        else if (sCurrentLine.matches("^Rozdział \\w*$") || sCurrentLine.matches("^[^a-z]*$")) {
+                        else if (sCurrentLine.matches("^Rozdział \\w*$") || sCurrentLine.matches("^[A-Z ]*$")) {
                             fileArray.add(sCurrentLine);
                             index++;
                         } else if (sCurrentLine.matches("^Art. [0-9]*[a-z]?.$")) {
