@@ -6,83 +6,57 @@ import java.util.Scanner;
 public class KonstytucjaRun {
     public static void main(String args[]) {
         Scanner input = new Scanner(System.in);
-        int range1 = 0, range2 = 0;
-        String filePath, mode, element, range, plik;
+        String filePath, mode, element, file, range1, range2;
+        Tree root = null;
+        OptionsParser optionsParser;
 
-        filePath = "./uokik.txt";
-        mode = "T";
-        element = "ALL";
-        range = "P";
-        plik = "K";
-        range1 = 2;
-        range2 = 0;
-        /*System.out.println("Podaj ścieżkę do pliku: ");
-        filePath = input.nextLine();*/
-/*
+        //filePath = "./konstytucja.txt";
+        //mode = "T";
+        //element = "Art. 241.";
+        //file = "K";
+        range1 = "";
+        range2 = "";
 
-        System.out.println("Podany plik to: K - Konstytucja.txt, U - UOKIK.txt");
-        plik = input.nextLine();
+        System.out.println("Ścieżka do pliku | plik - K - konstytucja, U - uokik | tryb - S - spis treści, T - treść");
+        filePath = input.next();
+        file = input.next();
+        mode = input.next();
 
-        System.out.println("Podaj tryb działania programu: S - Spis treści, T - Treść podanego pliku");
-        mode = input.nextLine();
+        if(!file.equals("K") && !file.equals("U")){
+            System.out.println("Błędne dane!");
+            return;
+        }
 
         System.out.println("Podaj element, który chcesz wyświetlić:\n" +
-                "Rozdział, Sekcja, Artykuł, Artykuł 'Nr' Punkt, ALL\n");
+                "ALL - wyświetl całość dokumentu, Z - zakres artykułów, Element dokładnie podany ze spisu treści\n" +
+                "Jeśli chcesz wyświetlić zakres artykułów podaj w kolejnych liniach odczytu ich nazwy\n");
+
+        element = input.nextLine(); //consume the \n from the previous input
         element = input.nextLine();
-
-        if (!element.equals("ALL")) {
-            System.out.println("Podaj tryb wyświetlenia elementu: P - Pojedynczy element, Z - Zakres elementów");
-            range = input.nextLine();
-
-            switch (range) {
-                case "P":
-                    System.out.println("Podaj numer elementu do wyświetlenia");
-                    range1 = Integer.parseInt(input.nextLine());
-                    break;
-                case "Z":
-                    System.out.println("Podaj początek zakresu elementów do wyświetlenia");
-                    range1 = Integer.parseInt(input.nextLine());
-                    System.out.println("Podaj koniec zakresu elementów do wyświetlenia");
-                    range2 = Integer.parseInt(input.nextLine());
-                    break;
-                default:
-                    System.out.println("Błędne dane!");
-                    break;
-            }
-        }
-*/
 
         FileParser fileParser = new FileParser(filePath);
         ArrayList<String> fileToArray = fileParser.parseInputFile();
 
-/*
-        KonstytucjaInputParser konstytucjaInputParser = new KonstytucjaInputParser(fileToArray);
-        Tree root = konstytucjaInputParser.parseInputFile();
-*/
+        if (file.equals("K")) {
+            KonstytucjaInputParser konstytucjaInputParser = new KonstytucjaInputParser(fileToArray);
+            root = konstytucjaInputParser.parseInputFile();
+        } else if (file.equals("U")) {
+            UokikInputParser uokikInputParser = new UokikInputParser(fileToArray);
+            root = uokikInputParser.parseInputFile();
+        } else {
+            System.out.println("Błędne dane!");
+            return;
+        }
+
+        if (element.equals("Z")) {
+            range1 = input.nextLine();
+            range2 = input.nextLine();
+            optionsParser = new OptionsParser(mode, range1, range2, root);
+        } else {
+            optionsParser = new OptionsParser(mode, element, root);
+        }
 
 
-        UokikInputParser uokikInputParser = new UokikInputParser(fileToArray);
-        Tree root = uokikInputParser.parseInputFile();
-
-
-        OptionsParser optionsParser = new OptionsParser(mode, element, range1, range2, root);
         optionsParser.printOutput();
-
-        //root.printPreorder(root);
-
-/*
-        switch (plik) {
-            case "K":
-                KonstytucjaInputParser konstytucjaInputParser = new KonstytucjaInputParser(filePath, mode, element, range1, range2);
-                konstytucjaInputParser.parseInputFile();
-                break;
-            case "U":
-                UokikInputParser uokikInputParser = new UokikInputParser(filePath, mode, element, range1, range2);
-                uokikInputParser.parseInputFile();
-                break;
-            default:
-                System.out.println("Błędne dane!");
-                break;
-        }*/
     }
 }
